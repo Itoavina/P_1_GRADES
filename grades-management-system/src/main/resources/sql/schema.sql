@@ -1,17 +1,62 @@
--- Create initial schema for grade tracking
-CREATE DATABASE IF NOT EXISTS grades_db;
+-- Create Grade Management Schema
 
-CREATE TABLE IF NOT EXISTS students (
+-- Drop tables in reverse order of creation to avoid foreign key issues
+DROP TABLE IF EXISTS grades CASCADE;
+DROP TABLE IF EXISTS exams CASCADE;
+DROP TABLE IF EXISTS parameters CASCADE;
+DROP TABLE IF EXISTS subjects CASCADE;
+DROP TABLE IF EXISTS correctors CASCADE;
+DROP TABLE IF EXISTS students CASCADE;
+DROP TABLE IF EXISTS operators CASCADE;
+
+-- 1. Operators (Used to define how grades are interpreted like "highest" -> '>', "lowest" -> '<', etc.)
+CREATE TABLE operators (
     id SERIAL PRIMARY KEY,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL
+    name VARCHAR(50) NOT NULL, -- e.g., 'Highest', 'Lowest', 'Average'
+    symbol VARCHAR(10)          -- e.g., '>', '<', 'null'
 );
 
-CREATE TABLE IF NOT EXISTS grades (
+-- 2. Students
+CREATE TABLE students (
     id SERIAL PRIMARY KEY,
-    student_id INT REFERENCES students(id),
-    subject VARCHAR(100) NOT NULL,
-    score DECIMAL(5, 2) CHECK (score >= 0 AND score <= 100),
-    exam_date DATE
+    name VARCHAR(100) NOT NULL
+);
+
+-- 3. Correctors (Teachers/Administrators)
+CREATE TABLE correctors (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+-- 4. Subjects (with Coefficient)
+CREATE TABLE subjects (
+    id SERIAL PRIMARY KEY,
+    subject_name VARCHAR(100) NOT NULL,
+    coefficient NUMERIC(5, 2) DEFAULT 1.0
+);
+
+-- 5. Exams (Linked to a Subject)
+CREATE TABLE exams (
+    id SERIAL PRIMARY KEY,
+    id_subject INT REFERENCES subjects(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    exam_date DATE DEFAULT CURRENT_DATE
+);
+
+-- 6. Parameters (Grade ranges and grading rules per subject)
+CREATE TABLE parameters (
+    id SERIAL PRIMARY KEY,
+    id_subject INT REFERENCES subjects(id) ON DELETE CASCADE,
+    min_value NUMERIC(5, 2) NOT NULL,
+    max_value NUMERIC(5, 2) NOT NULL,
+    id_operator INT REFERENCES operators(id)
+);
+
+-- 7. Grades (Actual scores for students per exam)
+CREATE TABLE grades (
+    id SERIAL PRIMARY KEY,
+    id_student INT REFERENCES students(id) ON DELETE CASCADE,
+    id_exam INT REFERENCES exams(id) ON DELETE CASCADE,
+    value NUMERIC(5, 2) NOT NULL CHECK (value >= 0),
+    id_corrector INT REFERENCES correctors(id)
 );
