@@ -26,17 +26,27 @@ public class ParameterRepository {
             try { 
                 p.setSubjectName(rs.getString("subject_name"));
                 p.setOperatorName(rs.getString("operator_name"));
+                p.setOperatorSymbol(rs.getString("operator_symbol"));
             } catch (Exception ignored) {}
             return p;
         }
     }
 
     public List<Parameter> findAll() {
-        return jdbcTemplate.query("SELECT p.*, s.subject_name, o.name as operator_name FROM parameters p JOIN subjects s ON p.id_subject = s.id JOIN operators o ON p.id_operator = o.id", new ParameterRowMapper());
+        return jdbcTemplate.query("SELECT p.*, s.subject_name, o.name as operator_name, o.symbol as operator_symbol FROM parameters p JOIN subjects s ON p.id_subject = s.id JOIN operators o ON p.id_operator = o.id", new ParameterRowMapper());
     }
 
     public Parameter findById(Integer id) {
-        return jdbcTemplate.queryForObject("SELECT p.*, s.subject_name, o.name as operator_name FROM parameters p JOIN subjects s ON p.id_subject = s.id JOIN operators o ON p.id_operator = o.id WHERE p.id = ?", new ParameterRowMapper(), id);
+        return jdbcTemplate.queryForObject("SELECT p.*, s.subject_name, o.name as operator_name, o.symbol as operator_symbol FROM parameters p JOIN subjects s ON p.id_subject = s.id JOIN operators o ON p.id_operator = o.id WHERE p.id = ?", new ParameterRowMapper(), id);
+    }
+
+    public List<Parameter> findBySubject(Integer subjectId) {
+        String sql = "SELECT p.*, s.subject_name, o.name as operator_name, o.symbol as operator_symbol " +
+                     "FROM parameters p " +
+                     "JOIN subjects s ON p.id_subject = s.id " +
+                     "JOIN operators o ON p.id_operator = o.id " +
+                     "WHERE p.id_subject = ?";
+        return jdbcTemplate.query(sql, new ParameterRowMapper(), subjectId);
     }
 
     public int save(Parameter p) {

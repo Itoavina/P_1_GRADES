@@ -40,6 +40,17 @@ public class GradeRepository {
         return jdbcTemplate.queryForObject("SELECT g.*, st.name as student_name, e.name as exam_name, c.name as corrector_name FROM grades g JOIN students st ON g.id_student = st.id JOIN exams e ON g.id_exam = e.id JOIN correctors c ON g.id_corrector = c.id WHERE g.id = ?", new GradeRowMapper(), id);
     }
 
+    public List<Grade> findByStudentAndExam(Integer studentId, Integer examId) {
+        String sql = "SELECT g.*, st.name as student_name, e.name as exam_name, c.name as corrector_name " +
+                     "FROM grades g " +
+                     "JOIN students st ON g.id_student = st.id " +
+                     "JOIN exams e ON g.id_exam = e.id " +
+                     "JOIN correctors c ON g.id_corrector = c.id " +
+                     "WHERE g.id_student = ? AND g.id_exam = ? " +
+                     "ORDER BY g.id ASC"; // Sorting to have a predictable sequence for delta calculation
+        return jdbcTemplate.query(sql, new GradeRowMapper(), studentId, examId);
+    }
+
     public int save(Grade g) {
         return jdbcTemplate.update("INSERT INTO grades (id_student, id_exam, value, id_corrector) VALUES (?, ?, ?, ?)", g.getIdStudent(), g.getIdExam(), g.getValue(), g.getIdCorrector());
     }
