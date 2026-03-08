@@ -4,64 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome - Grade Management System</title>
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --success: #10b981;
-            --danger: #ef4444;
-            --bg: #f9fafb;
-            --text: #111827;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: white;
-            padding: 3rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-        }
-        h1 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-        .status-box {
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-top: 1.5rem;
-            font-weight: 500;
-        }
-        .success {
-            background-color: #ecfdf5;
-            color: var(--success);
-            border: 1px solid #10b981;
-        }
-        .fail {
-            background-color: #fef2f2;
-            color: var(--danger);
-            border: 1px solid #ef4444;
-        }
-    </style>
+    <title>Dashboard - Grade Management System</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/styles.css">
 </head>
 <body>
+    <%@ include file="fragments/navbar.jsp" %>
+
     <div class="container">
-        <h1>Grade Management System</h1>
-        <p>${message}</p>
-        
-        <div class="status-box ${dbStatus.contains('Failed') ? 'fail' : 'success'}">
-            <strong>Database Status:</strong><br>
-            ${dbStatus}
+        <header style="margin-bottom: 4rem; text-align: left;">
+            <h1 style="font-size: 3rem; font-weight: 900; letter-spacing: -1px;">DASHBOARD</h1>
+            <p style="color: var(--text-secondary);">${message}</p>
+        </header>
+
+        <div class="grid">
+            <a href="${pageContext.request.contextPath}/students" class="card">
+                <h3>Students</h3>
+                <p>Registry of identified students and academic profiles.</p>
+            </a>
+            <a href="${pageContext.request.contextPath}/correctors" class="card">
+                <h3>Correctors</h3>
+                <p>Authorized personnel for evaluation and validation.</p>
+            </a>
+            <a href="${pageContext.request.contextPath}/subjects" class="card">
+                <h3>Subjects</h3>
+                <p>Curriculum modules and credit weightings.</p>
+            </a>
+            <a href="${pageContext.request.contextPath}/exams" class="card">
+                <h3>Exams</h3>
+                <p>Scheduled assessments and testing sessions.</p>
+            </a>
+            <a href="${pageContext.request.contextPath}/operators" class="card">
+                <h3>Operators</h3>
+                <p>Logic identifiers for grading computation.</p>
+            </a>
+            <a href="${pageContext.request.contextPath}/parameters" class="card">
+                <h3>Parameters</h3>
+                <p>Control ranges for automated grade processing.</p>
+            </a>
+            <a href="${pageContext.request.contextPath}/grades" class="card">
+                <h3>Grades</h3>
+                <p>Consolidated academic results and records.</p>
+            </a>
+        </div>
+
+        <div class="status ${dbStatus.contains('Failed') ? 'fail' : 'success'}">
+            SYSTEM_DB_LINK: ${dbStatus}
         </div>
     </div>
 </body>
