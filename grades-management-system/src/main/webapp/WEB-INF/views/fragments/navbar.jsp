@@ -9,5 +9,6 @@
         <a href="${pageContext.request.contextPath}/correctors">Correctors</a>
         <a href="${pageContext.request.contextPath}/operators">Operators</a>
         <a href="${pageContext.request.contextPath}/parameters">Parameters</a>
+        <a href="${pageContext.request.contextPath}/simulation" style="color: var(--accent); font-weight: 800;">SIMULATION</a>
     </div>
 </nav>
