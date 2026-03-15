@@ -5,8 +5,7 @@ import java.math.BigDecimal;
 public class Parameter {
     private Integer id;
     private Integer idSubject;
-    private BigDecimal minValue;
-    private BigDecimal maxValue;
+    private BigDecimal limitValue;
     private Integer idOperator;
     private String subjectName; // for convenience
     private String operatorName; // for convenience
@@ -17,10 +16,8 @@ public class Parameter {
     public void setId(Integer id) { this.id = id; }
     public Integer getIdSubject() { return idSubject; }
     public void setIdSubject(Integer idSubject) { this.idSubject = idSubject; }
-    public BigDecimal getMinValue() { return minValue; }
-    public void setMinValue(BigDecimal minValue) { this.minValue = minValue; }
-    public BigDecimal getMaxValue() { return maxValue; }
-    public void setMaxValue(BigDecimal maxValue) { this.maxValue = maxValue; }
+    public BigDecimal getLimitValue() { return limitValue; }
+    public void setLimitValue(BigDecimal limitValue) { this.limitValue = limitValue; }
     public Integer getIdOperator() { return idOperator; }
     public void setIdOperator(Integer idOperator) { this.idOperator = idOperator; }
     public String getSubjectName() { return subjectName; }

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <nav class="navbar">
-    <a href="${pageContext.request.contextPath}/" class="nav-brand">Grades.OS</a>
+    <a href="${pageContext.request.contextPath}/" class="nav-brand">ETU003597</a>
     <div class="nav-links">
         <a href="${pageContext.request.contextPath}/students">Students</a>
         <a href="${pageContext.request.contextPath}/subjects">Subjects</a>

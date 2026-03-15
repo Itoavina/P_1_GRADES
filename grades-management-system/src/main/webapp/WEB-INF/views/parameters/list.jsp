@@ -14,10 +14,10 @@
             <a href="${pageContext.request.contextPath}/parameters/add" class="btn btn-primary">Add Parameter</a>
         </div>
         <table>
-            <thead><tr><th>ID</th><th>Subject</th><th>Range</th><th>Operator</th><th>Actions</th></tr></thead>
+            <thead><tr><th>ID</th><th>Subject</th><th>Limit</th><th>Operator</th><th>Actions</th></tr></thead>
             <tbody>
                 <c:forEach var="p" items="${parameters}">
-                    <tr><td>${p.id}</td><td>${p.subjectName}</td><td>${p.minValue} - ${p.maxValue}</td><td>${p.operatorName}</td>
+                    <tr><td>${p.id}</td><td>${p.subjectName}</td><td>${p.limitValue}</td><td>${p.operatorName}</td>
                     <td>
                         <a href="${pageContext.request.contextPath}/parameters/edit/${p.id}" class="btn btn-outline" style="margin-right: 0.5rem;">Edit</a>
                         <a href="${pageContext.request.contextPath}/parameters/delete/${p.id}" class="btn btn-danger" onclick="return confirm('Delete?')">Delete</a>

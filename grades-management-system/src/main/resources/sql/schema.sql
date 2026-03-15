@@ -47,8 +47,7 @@ CREATE TABLE exams (
 CREATE TABLE parameters (
     id SERIAL PRIMARY KEY,
     id_subject INT REFERENCES subjects(id) ON DELETE CASCADE,
-    min_value NUMERIC(5, 2),
-    max_value NUMERIC(5, 2),
+    limit_value NUMERIC(5, 2),
     id_operator INT REFERENCES operators(id)
 );
 
