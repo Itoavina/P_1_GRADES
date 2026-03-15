@@ -20,8 +20,7 @@ public class ParameterRepository {
             Parameter p = new Parameter();
             p.setId(rs.getInt("id"));
             p.setIdSubject(rs.getInt("id_subject"));
-            p.setMinValue(rs.getBigDecimal("min_value"));
-            p.setMaxValue(rs.getBigDecimal("max_value"));
+            p.setLimitValue(rs.getBigDecimal("limit_value"));
             p.setIdOperator(rs.getInt("id_operator"));
             try { 
                 p.setSubjectName(rs.getString("subject_name"));
@@ -50,11 +49,11 @@ public class ParameterRepository {
     }
 
     public int save(Parameter p) {
-        return jdbcTemplate.update("INSERT INTO parameters (id_subject, min_value, max_value, id_operator) VALUES (?, ?, ?, ?)", p.getIdSubject(), p.getMinValue(), p.getMaxValue(), p.getIdOperator());
+        return jdbcTemplate.update("INSERT INTO parameters (id_subject, limit_value, id_operator) VALUES (?, ?, ?)", p.getIdSubject(), p.getLimitValue(), p.getIdOperator());
     }
 
     public int update(Parameter p) {
-        return jdbcTemplate.update("UPDATE parameters SET id_subject = ?, min_value = ?, max_value = ?, id_operator = ? WHERE id = ?", p.getIdSubject(), p.getMinValue(), p.getMaxValue(), p.getIdOperator(), p.getId());
+        return jdbcTemplate.update("UPDATE parameters SET id_subject = ?, limit_value = ?, id_operator = ? WHERE id = ?", p.getIdSubject(), p.getLimitValue(), p.getIdOperator(), p.getId());
     }
 
     public int deleteById(Integer id) { return jdbcTemplate.update("DELETE FROM parameters WHERE id = ?", id); }

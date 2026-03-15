@@ -4,7 +4,9 @@
 INSERT INTO operators (name, symbol) VALUES 
 ('Average Logic', 'null'),
 ('Highest Logic', '>'),
-('Lowest Logic', '<');
+('Lowest Logic', '<'),
+('Highest (Inclusive)', '>='),
+('Lowest (Inclusive)', '<=');
 
 -- 2. Insert Students
 INSERT INTO students (name) VALUES 
@@ -30,17 +32,13 @@ INSERT INTO exams (id_subject, name, exam_date) VALUES
 (2, 'Physics Midterm', '2024-05-10');
 
 -- 6. Insert Parameters (Rules for Mathematics)
--- If sum of differences is between 0 and 5 -> Take Average
-INSERT INTO parameters (id_subject, min_value, max_value, id_operator) VALUES 
-(1, 0, 5, 1); 
-
--- If sum of differences is between 5.01 and 10 -> Take Highest Grade
-INSERT INTO parameters (id_subject, min_value, max_value, id_operator) VALUES 
-(1, 5.01, 10, 2);
-
--- If sum of differences is above 10 -> Take Lowest Grade (Extreme inconsistency)
-INSERT INTO parameters (id_subject, min_value, max_value, id_operator) VALUES 
-(1, 10.01, NULL, 3);
+-- If closest limit is 0 -> Take Average
+-- If closest limit is 10 -> Take Highest Grade
+-- If closest limit is 20 -> Take Lowest Grade (Extreme inconsistency)
+INSERT INTO parameters (id_subject, limit_value, id_operator) VALUES 
+(1, 0.00, 1),  -- Operator 1 is Average
+(1, 10.00, 2), -- Operator 2 is Highest
+(1, 20.00, 3); -- Operator 3 is Lowest
 
 -- 7. Insert Grades (Scenario for Simulation)
 -- Student 1 (Jean Dupont) for Math Exam

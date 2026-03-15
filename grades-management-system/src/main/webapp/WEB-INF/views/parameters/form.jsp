@@ -18,15 +18,9 @@
                     <form:options items="${subjects}" itemValue="id" itemLabel="name" />
                 </form:select>
             </div>
-            <div class="form-group" style="display: flex; gap: 1rem;">
-                <div style="flex: 1;">
-                    <label>Min Value</label>
-                    <form:input path="minValue" type="number" step="0.01" required="true" />
-                </div>
-                <div style="flex: 1;">
-                    <label>Max Value</label>
-                    <form:input path="maxValue" type="number" step="0.01" required="true" />
-                </div>
+            <div class="form-group">
+                <label>Limit Value</label>
+                <form:input path="limitValue" type="number" step="0.01" required="true" />
             </div>
             <div class="form-group">
                 <label>Operator</label>

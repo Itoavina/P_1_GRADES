@@ -51,17 +51,7 @@
                         <span class="data-value">
                             <c:choose>
                                 <c:when test="${not empty result.matchingParameter}">
-                                    <c:choose>
-                                        <c:when test="${empty result.matchingParameter.minValue}">
-                                            ${result.matchingParameter.maxValue} and lower
-                                        </c:when>
-                                        <c:when test="${empty result.matchingParameter.maxValue}">
-                                            ${result.matchingParameter.minValue} and higher
-                                        </c:when>
-                                        <c:otherwise>
-                                            ${result.matchingParameter.minValue} to ${result.matchingParameter.maxValue}
-                                        </c:otherwise>
-                                    </c:choose>
+                                    Code: ${result.matchingParameter.operatorName} | Limit: ${result.matchingParameter.limitValue}
                                 </c:when>
                                 <c:otherwise>None (Default Applied)</c:otherwise>
                             </c:choose>

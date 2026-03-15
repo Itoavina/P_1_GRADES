@@ -46,26 +46,49 @@ public class GradingService {
         // 3. Find Matching Parameter for the subject
         List<Parameter> params = parameterRepo.findBySubject(exam.getIdSubject());
         Parameter matchingParam = null;
+        BigDecimal minDifference = null;
+
         for (Parameter p : params) {
-            boolean minMatch = (p.getMinValue() == null || sumOfDiffs.compareTo(p.getMinValue()) >= 0);
-            boolean maxMatch = (p.getMaxValue() == null || sumOfDiffs.compareTo(p.getMaxValue()) <= 0);
-            if (minMatch && maxMatch) {
+            if (p.getLimitValue() == null) {
+                // Keep as fallback if no limit value exists
+                if (matchingParam == null) {
+                    matchingParam = p;
+                }
+                continue;
+            }
+
+            BigDecimal diff = sumOfDiffs.subtract(p.getLimitValue()).abs();
+
+            if (minDifference == null) {
                 matchingParam = p;
-                break;
+                minDifference = diff;
+            } else {
+                int comparison = diff.compareTo(minDifference);
+                if (comparison < 0) {
+                    matchingParam = p;
+                    minDifference = diff;
+                } else if (comparison == 0) {
+                    // Difference is the same, take the lowest limit
+                    if (p.getLimitValue().compareTo(matchingParam.getLimitValue()) < 0) {
+                        matchingParam = p;
+                        minDifference = diff;
+                    }
+                }
             }
         }
         result.setMatchingParameter(matchingParam);
 
         // 4. Apply Operator Logic
-        if (matchingParam != null && matchingParam.getOperatorSymbol() != null) {
+        if (matchingParam != null && matchingParam.getOperatorName() != null) {
+            String opName = matchingParam.getOperatorName().toLowerCase();
             String symbol = matchingParam.getOperatorSymbol();
             result.setOperatorApplied(matchingParam.getOperatorName() + " (" + symbol + ")");
             
             BigDecimal finalVal = BigDecimal.ZERO;
-            if (symbol.equals(">")) {
+            if (opName.contains("highest") || opName.contains("max") || (symbol != null && symbol.contains(">"))) {
                 // Highest
                 finalVal = grades.stream().map(Grade::getValue).max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
-            } else if (symbol.equals("<")) {
+            } else if (opName.contains("lowest") || opName.contains("min") || (symbol != null && symbol.contains("<"))) {
                 // Lowest
                 finalVal = grades.stream().map(Grade::getValue).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
             } else {
