@@ -19,20 +19,23 @@ public class ExamRepository {
         public Exam mapRow(ResultSet rs, int rowNum) throws SQLException {
             Exam e = new Exam();
             e.setId(rs.getInt("id"));
-            e.setIdSubject(rs.getInt("id_subject"));
+            e.setIdSubject((Integer) rs.getObject("id_subject"));
             e.setName(rs.getString("name"));
-            e.setExamDate(rs.getDate("exam_date").toLocalDate());
+            java.sql.Date date = rs.getDate("exam_date");
+            if (date != null) {
+                e.setExamDate(date.toLocalDate());
+            }
             try { e.setSubjectName(rs.getString("subject_name")); } catch (Exception ignored) {}
             return e;
         }
     }
 
     public List<Exam> findAll() {
-        return jdbcTemplate.query("SELECT e.*, s.subject_name FROM exams e JOIN subjects s ON e.id_subject = s.id", new ExamRowMapper());
+        return jdbcTemplate.query("SELECT e.*, s.subject_name FROM exams e LEFT JOIN subjects s ON e.id_subject = s.id", new ExamRowMapper());
     }
 
     public Exam findById(Integer id) {
-        return jdbcTemplate.queryForObject("SELECT e.*, s.subject_name FROM exams e JOIN subjects s ON e.id_subject = s.id WHERE e.id = ?", new ExamRowMapper(), id);
+        return jdbcTemplate.queryForObject("SELECT e.*, s.subject_name FROM exams e LEFT JOIN subjects s ON e.id_subject = s.id WHERE e.id = ?", new ExamRowMapper(), id);
     }
 
     public int save(Exam e) {

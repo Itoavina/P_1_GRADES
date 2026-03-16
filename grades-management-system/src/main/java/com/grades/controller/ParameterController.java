@@ -27,13 +27,13 @@ public class ParameterController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Parameter parameter) {
+    public String save(@ModelAttribute("parameter") Parameter parameter) {
         service.saveOrUpdateParameter(parameter);
         return "redirect:/parameters";
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Integer id, Model model) {
+    public String editForm(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("parameter", service.getParameterById(id));
         model.addAttribute("subjects", service.getAllSubjects());
         model.addAttribute("operators", service.getAllOperators());
@@ -41,7 +41,7 @@ public class ParameterController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable("id") Integer id) {
         service.deleteParameter(id);
         return "redirect:/parameters";
     }

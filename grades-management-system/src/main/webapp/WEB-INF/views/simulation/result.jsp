@@ -51,7 +51,7 @@
                         <span class="data-value">
                             <c:choose>
                                 <c:when test="${not empty result.matchingParameter}">
-                                    Code: ${result.matchingParameter.operatorName} | Limit: ${result.matchingParameter.limitValue}
+                                    Logic: ${result.matchingParameter.operatorName} | Condition: ${result.matchingParameter.comparisonSymbol} ${result.matchingParameter.limitValue}
                                 </c:when>
                                 <c:otherwise>None (Default Applied)</c:otherwise>
                             </c:choose>

@@ -25,19 +25,19 @@ public class OperatorController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Operator operator) {
+    public String save(@ModelAttribute("operator") Operator operator) {
         service.saveOrUpdateOperator(operator);
         return "redirect:/operators";
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Integer id, Model model) {
+    public String editForm(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("operator", service.getOperatorById(id));
         return "operators/form";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable("id") Integer id) {
         service.deleteOperator(id);
         return "redirect:/operators";
     }

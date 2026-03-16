@@ -19,10 +19,10 @@ public class GradeRepository {
         public Grade mapRow(ResultSet rs, int rowNum) throws SQLException {
             Grade g = new Grade();
             g.setId(rs.getInt("id"));
-            g.setIdStudent(rs.getInt("id_student"));
-            g.setIdExam(rs.getInt("id_exam"));
+            g.setIdStudent((Integer) rs.getObject("id_student"));
+            g.setIdExam((Integer) rs.getObject("id_exam"));
             g.setValue(rs.getBigDecimal("value"));
-            g.setIdCorrector(rs.getInt("id_corrector"));
+            g.setIdCorrector((Integer) rs.getObject("id_corrector"));
             try {
                 g.setStudentName(rs.getString("student_name"));
                 g.setExamName(rs.getString("exam_name"));
@@ -33,19 +33,19 @@ public class GradeRepository {
     }
 
     public List<Grade> findAll() {
-        return jdbcTemplate.query("SELECT g.*, st.name as student_name, e.name as exam_name, c.name as corrector_name FROM grades g JOIN students st ON g.id_student = st.id JOIN exams e ON g.id_exam = e.id JOIN correctors c ON g.id_corrector = c.id", new GradeRowMapper());
+        return jdbcTemplate.query("SELECT g.*, st.name as student_name, e.name as exam_name, c.name as corrector_name FROM grades g LEFT JOIN students st ON g.id_student = st.id LEFT JOIN exams e ON g.id_exam = e.id LEFT JOIN correctors c ON g.id_corrector = c.id", new GradeRowMapper());
     }
 
     public Grade findById(Integer id) {
-        return jdbcTemplate.queryForObject("SELECT g.*, st.name as student_name, e.name as exam_name, c.name as corrector_name FROM grades g JOIN students st ON g.id_student = st.id JOIN exams e ON g.id_exam = e.id JOIN correctors c ON g.id_corrector = c.id WHERE g.id = ?", new GradeRowMapper(), id);
+        return jdbcTemplate.queryForObject("SELECT g.*, st.name as student_name, e.name as exam_name, c.name as corrector_name FROM grades g LEFT JOIN students st ON g.id_student = st.id LEFT JOIN exams e ON g.id_exam = e.id LEFT JOIN correctors c ON g.id_corrector = c.id WHERE g.id = ?", new GradeRowMapper(), id);
     }
 
     public List<Grade> findByStudentAndExam(Integer studentId, Integer examId) {
         String sql = "SELECT g.*, st.name as student_name, e.name as exam_name, c.name as corrector_name " +
                      "FROM grades g " +
-                     "JOIN students st ON g.id_student = st.id " +
-                     "JOIN exams e ON g.id_exam = e.id " +
-                     "JOIN correctors c ON g.id_corrector = c.id " +
+                     "LEFT JOIN students st ON g.id_student = st.id " +
+                     "LEFT JOIN exams e ON g.id_exam = e.id " +
+                     "LEFT JOIN correctors c ON g.id_corrector = c.id " +
                      "WHERE g.id_student = ? AND g.id_exam = ? " +
                      "ORDER BY g.id ASC"; // Sorting to have a predictable sequence for delta calculation
         return jdbcTemplate.query(sql, new GradeRowMapper(), studentId, examId);

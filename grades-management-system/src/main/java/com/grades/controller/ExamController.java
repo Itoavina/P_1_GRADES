@@ -26,20 +26,20 @@ public class ExamController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Exam exam) {
+    public String save(@ModelAttribute("exam") Exam exam) {
         service.saveOrUpdateExam(exam);
         return "redirect:/exams";
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Integer id, Model model) {
+    public String editForm(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("exam", service.getExamById(id));
         model.addAttribute("subjects", service.getAllSubjects());
         return "exams/form";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable("id") Integer id) {
         service.deleteExam(id);
         return "redirect:/exams";
     }

@@ -30,13 +30,13 @@ public class GradeController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Grade grade) {
+    public String save(@ModelAttribute("grade") Grade grade) {
         service.saveOrUpdateGrade(grade);
         return "redirect:/grades";
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Integer id, Model model) {
+    public String editForm(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("grade", service.getGradeById(id));
         model.addAttribute("students", studentService.getAllStudents());
         model.addAttribute("exams", service.getAllExams());
@@ -45,7 +45,7 @@ public class GradeController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable("id") Integer id) {
         service.deleteGrade(id);
         return "redirect:/grades";
     }

@@ -22,7 +22,7 @@ public class StudentService {
     }
 
     public void saveOrUpdate(Student student) {
-        if (student.getId() == null) {
+        if (student.getId() == null || student.getId() == 0) {
             studentRepository.save(student);
         } else {
             studentRepository.update(student);

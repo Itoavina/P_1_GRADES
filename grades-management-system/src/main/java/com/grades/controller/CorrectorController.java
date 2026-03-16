@@ -25,19 +25,19 @@ public class CorrectorController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Corrector corrector) {
+    public String save(@ModelAttribute("corrector") Corrector corrector) {
         service.saveOrUpdateCorrector(corrector);
         return "redirect:/correctors";
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Integer id, Model model) {
+    public String editForm(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("corrector", service.getCorrectorById(id));
         return "correctors/form";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable("id") Integer id) {
         service.deleteCorrector(id);
         return "redirect:/correctors";
     }

@@ -46,7 +46,6 @@ public class GradingService {
         // 3. Find Matching Parameter for the subject
         List<Parameter> params = parameterRepo.findBySubject(exam.getIdSubject());
         Parameter matchingParam = null;
-        BigDecimal minDifference = null;
 
         for (Parameter p : params) {
             if (p.getLimitValue() == null) {
@@ -57,23 +56,21 @@ public class GradingService {
                 continue;
             }
 
-            BigDecimal diff = sumOfDiffs.subtract(p.getLimitValue()).abs();
+            String sym = p.getComparisonSymbol();
+            if (sym == null) sym = ">"; // Default fallback
+            
+            BigDecimal limit = p.getLimitValue();
+            boolean match = false;
+            int compResult = sumOfDiffs.compareTo(limit);
+            
+            if (sym.equals(">")) match = compResult > 0;
+            else if (sym.equals("<")) match = compResult < 0;
+            else if (sym.equals(">=")) match = compResult >= 0;
+            else if (sym.equals("<=")) match = compResult <= 0;
 
-            if (minDifference == null) {
+            if (match) {
                 matchingParam = p;
-                minDifference = diff;
-            } else {
-                int comparison = diff.compareTo(minDifference);
-                if (comparison < 0) {
-                    matchingParam = p;
-                    minDifference = diff;
-                } else if (comparison == 0) {
-                    // Difference is the same, take the lowest limit
-                    if (p.getLimitValue().compareTo(matchingParam.getLimitValue()) < 0) {
-                        matchingParam = p;
-                        minDifference = diff;
-                    }
-                }
+                break; // Take the first matching condition
             }
         }
         result.setMatchingParameter(matchingParam);

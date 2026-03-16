@@ -19,6 +19,15 @@
                 </form:select>
             </div>
             <div class="form-group">
+                <label>Comparison</label>
+                <form:select path="comparisonSymbol">
+                    <form:option value=">">Superior (>)</form:option>
+                    <form:option value="<">Inferior (<)</form:option>
+                    <form:option value=">=">Superior or Equal (>=)</form:option>
+                    <form:option value="<=">Inferior or Equal (<=)</form:option>
+                </form:select>
+            </div>
+            <div class="form-group">
                 <label>Limit Value</label>
                 <form:input path="limitValue" type="number" step="0.01" required="true" />
             </div>
