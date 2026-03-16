@@ -10,6 +10,7 @@ public class Parameter {
     private String subjectName; // for convenience
     private String operatorName; // for convenience
     private String operatorSymbol; // for logic determination
+    private String comparisonSymbol; // for limit comparison (>, <, >=, <=)
 
     public Parameter() {}
     public Integer getId() { return id; }
@@ -26,4 +27,6 @@ public class Parameter {
     public void setOperatorName(String operatorName) { this.operatorName = operatorName; }
     public String getOperatorSymbol() { return operatorSymbol; }
     public void setOperatorSymbol(String operatorSymbol) { this.operatorSymbol = operatorSymbol; }
+    public String getComparisonSymbol() { return comparisonSymbol; }
+    public void setComparisonSymbol(String comparisonSymbol) { this.comparisonSymbol = comparisonSymbol; }
 }

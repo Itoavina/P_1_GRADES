@@ -1,12 +1,16 @@
 -- Sample Data for Grades Management System
 
 -- 1. Insert Operators (Grading Logic)
-INSERT INTO operators (name, symbol) VALUES 
-('Average Logic', 'null'),
-('Highest Logic', '>'),
-('Lowest Logic', '<'),
-('Highest (Inclusive)', '>='),
-('Lowest (Inclusive)', '<=');
+TRUNCATE TABLE operators CASCADE;
+INSERT INTO operators (id, name, symbol) VALUES 
+(1, 'Average Logic', 'null'),
+(2, 'Highest Logic', '>'),
+(3, 'Lowest Logic', '<'),
+(4, 'Highest (Inclusive)', '>='),
+(5, 'Lowest (Inclusive)', '<=');
+
+-- Reset serial sequence to continue from the next ID
+SELECT setval('operators_id_seq', (SELECT MAX(id) FROM operators));
 
 -- 2. Insert Students
 INSERT INTO students (name) VALUES 
@@ -31,14 +35,13 @@ INSERT INTO exams (id_subject, name, exam_date) VALUES
 (1, 'Final Math Exam 2024', '2024-06-15'),
 (2, 'Physics Midterm', '2024-05-10');
 
--- 6. Insert Parameters (Rules for Mathematics)
--- If closest limit is 0 -> Take Average
--- If closest limit is 10 -> Take Highest Grade
--- If closest limit is 20 -> Take Lowest Grade (Extreme inconsistency)
-INSERT INTO parameters (id_subject, limit_value, id_operator) VALUES 
-(1, 0.00, 1),  -- Operator 1 is Average
-(1, 10.00, 2), -- Operator 2 is Highest
-(1, 20.00, 3); -- Operator 3 is Lowest
+-- If sum of diffs > 20 -> Take Lowest Grade (Extreme inconsistency)
+-- If sum of diffs > 10 -> Take Highest Grade
+-- If sum of diffs >= 0 -> Take Average (Fallback)
+INSERT INTO parameters (id_subject, limit_value, id_operator, comparison_symbol) VALUES 
+(1, 20.00, 3, '>'), -- Operator 3 is Lowest, for diff > 20
+(1, 10.00, 2, '>'), -- Operator 2 is Highest, for diff > 10
+(1, 0.00, 1, '>='); -- Operator 1 is Average, for diff >= 0
 
 -- 7. Insert Grades (Scenario for Simulation)
 -- Student 1 (Jean Dupont) for Math Exam
@@ -58,3 +61,12 @@ INSERT INTO grades (id_student, id_exam, value, id_corrector) VALUES
 (2, 1, 10.0, 1),
 (2, 1, 18.0, 2),
 (2, 1, 12.0, 3);
+
+-- Reset ALL sequences to ensure UI "Add" operations work correctly
+SELECT setval('operators_id_seq', (SELECT MAX(id) FROM operators));
+SELECT setval('students_id_seq', COALESCE((SELECT MAX(id) FROM students), 1));
+SELECT setval('correctors_id_seq', COALESCE((SELECT MAX(id) FROM correctors), 1));
+SELECT setval('subjects_id_seq', COALESCE((SELECT MAX(id) FROM subjects), 1));
+SELECT setval('exams_id_seq', COALESCE((SELECT MAX(id) FROM exams), 1));
+SELECT setval('parameters_id_seq', COALESCE((SELECT MAX(id) FROM parameters), 1));
+SELECT setval('grades_id_seq', COALESCE((SELECT MAX(id) FROM grades), 1));

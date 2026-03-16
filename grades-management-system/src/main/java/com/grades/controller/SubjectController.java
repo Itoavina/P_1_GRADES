@@ -25,19 +25,19 @@ public class SubjectController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Subject subject) {
+    public String save(@ModelAttribute("subject") Subject subject) {
         service.saveOrUpdateSubject(subject);
         return "redirect:/subjects";
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Integer id, Model model) {
+    public String editForm(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("subject", service.getSubjectById(id));
         return "subjects/form";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
+    public String delete(@PathVariable("id") Integer id) {
         service.deleteSubject(id);
         return "redirect:/subjects";
     }

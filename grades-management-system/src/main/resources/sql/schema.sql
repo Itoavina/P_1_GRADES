@@ -48,7 +48,8 @@ CREATE TABLE parameters (
     id SERIAL PRIMARY KEY,
     id_subject INT REFERENCES subjects(id) ON DELETE CASCADE,
     limit_value NUMERIC(5, 2),
-    id_operator INT REFERENCES operators(id)
+    id_operator INT REFERENCES operators(id) ON DELETE CASCADE,
+    comparison_symbol VARCHAR(10) DEFAULT '>'
 );
 
 -- 7. Grades (Actual scores for students per exam)
@@ -57,5 +58,5 @@ CREATE TABLE grades (
     id_student INT REFERENCES students(id) ON DELETE CASCADE,
     id_exam INT REFERENCES exams(id) ON DELETE CASCADE,
     value NUMERIC(5, 2) NOT NULL CHECK (value >= 0),
-    id_corrector INT REFERENCES correctors(id)
+    id_corrector INT REFERENCES correctors(id) ON DELETE CASCADE
 );

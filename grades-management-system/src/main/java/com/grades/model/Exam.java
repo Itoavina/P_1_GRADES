@@ -1,11 +1,13 @@
 package com.grades.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 public class Exam {
     private Integer id;
     private Integer idSubject;
     private String name;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate examDate;
     private String subjectName; // for convenience in listing
 
