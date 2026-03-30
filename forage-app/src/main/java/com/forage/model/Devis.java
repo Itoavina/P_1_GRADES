@@ -25,6 +25,7 @@ public class Devis {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_devis", nullable = false)
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date dateDevis;
 
     @OneToMany(mappedBy = "devis", cascade = CascadeType.ALL, orphanRemoval = true)
