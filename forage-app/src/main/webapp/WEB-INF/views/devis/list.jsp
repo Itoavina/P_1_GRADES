@@ -3,80 +3,80 @@
 <%@ taglib uri="jakarta.tags.fmt" prefix="fmt" %>
 <jsp:include page="../layout/header.jsp" />
 
-<div class="fade-in pt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="content-container animate-fade-in">
+    <div class="d-flex justify-content-between align-items-end mb-5">
         <div>
-            <h2 class="mb-0">Gestion des Devis</h2>
-            <p class="text-muted small mb-0">Liste de tous les devis enregistrés</p>
+            <h1 class="mb-1" style="font-size: 2.5rem; letter-spacing: -1px;">GESTION DES DEVIS</h1>
+            <p class="text-muted mb-0 font-monospace small">Module de Tarification Corporate</p>
         </div>
-        <a href="${pageContext.request.contextPath}/devis/create" class="btn btn-primary px-4 rounded-pill">
-            + Nouveau Devis
-        </a>
+        <div>
+            <a href="${pageContext.request.contextPath}/devis/create" class="btn btn-primary-custom px-4 py-2">
+                + NOUVEAU DEVIS
+            </a>
+        </div>
     </div>
 
-    <div class="card card-custom border-0 shadow-sm overflow-hidden">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="table-light text-muted uppercase small">
+    <div class="table-responsive">
+        <table class="table table-custom">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">ID</th>
+                    <th>Client & Demande</th>
+                    <th>Type Devis</th>
+                    <th>Date Émission</th>
+                    <th>Statut</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="devis" items="${devisList}">
                     <tr>
-                        <th class="ps-4">ID</th>
-                        <th>Client / Demande</th>
-                        <th>Type</th>
-                        <th>Date</th>
-                        <th>Statut</th>
-                        <th class="text-end pe-4">Actions</th>
+                        <td class="font-monospace small text-muted">#${devis.id}</td>
+                        <td>
+                            <div class="fw-bold text-white">${devis.demande.client.nom}</div>
+                            <div class="text-muted small text-truncate" style="max-width: 250px;">
+                                ${devis.demande.description}
+                            </div>
+                        </td>
+                        <td>
+                            <span style="font-size:0.75rem; letter-spacing:0.5px; opacity:0.8;">
+                                ${devis.typeDevis.libelle}
+                            </span>
+                        </td>
+                        <td>
+                            <fmt:formatDate value="${devis.dateDevis}" pattern="dd MMM yyyy" />
+                        </td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${devis.statut.libelle == 'Approuvé'}">
+                                    <span style="color: #4ade80; font-size: 0.75rem; border: 1px solid #4ade80; padding: 2px 8px; border-radius: 2px;">APPROUVÉ</span>
+                                </c:when>
+                                <c:when test="${devis.statut.libelle == 'En attente'}">
+                                    <span style="color: #fbbf24; font-size: 0.75rem; border: 1px solid #fbbf24; padding: 2px 8px; border-radius: 2px;">EN ATTENTE</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span style="color: #f87171; font-size: 0.75rem; border: 1px solid #f87171; padding: 2px 8px; border-radius: 2px;">${devis.statut.libelle.toUpperCase()}</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td class="text-end">
+                            <a href="${pageContext.request.contextPath}/devis/edit/${devis.id}" 
+                               class="btn btn-outline-custom btn-sm px-3 me-2" style="font-size: 0.7rem;">MODIFIER</a>
+                            <a href="${pageContext.request.contextPath}/devis/delete/${devis.id}" 
+                               class="btn btn-outline-custom btn-sm px-3" style="font-size: 0.7rem; border-color: rgba(248, 113, 113, 0.4); color: #f87171;"
+                               onclick="return confirm('Supprimer définitivement ce devis ?')">EFFACER</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="devis" items="${devisList}">
-                        <tr>
-                            <td class="ps-4 font-monospace small">#${devis.id}</td>
-                            <td>
-                                <div>${devis.demande.client.nom}</div>
-                                <div class="text-muted small text-truncate" style="max-width: 200px;">
-                                    ${devis.demande.description}
-                                </div>
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary-subtle text-secondary small rounded-pill">
-                                    ${devis.typeDevis.libelle}
-                                </span>
-                            </td>
-                            <td>
-                                <fmt:formatDate value="${devis.dateDevis}" pattern="dd/MM/yyyy HH:mm" />
-                            </td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${devis.statut.libelle == 'Approuvé'}">
-                                        <span class="badge bg-success-subtle text-success small rounded-pill">Approuvé</span>
-                                    </c:when>
-                                    <c:when test="${devis.statut.libelle == 'En attente'}">
-                                        <span class="badge bg-warning-subtle text-warning small rounded-pill">En attente</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="badge bg-danger-subtle text-danger small rounded-pill">${devis.statut.libelle}</span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                            <td class="text-end pe-4">
-                                <a href="${pageContext.request.contextPath}/devis/edit/${devis.id}" 
-                                   class="btn btn-sm btn-outline-secondary rounded-pill px-3 me-2">Modifier</a>
-                                <a href="${pageContext.request.contextPath}/devis/delete/${devis.id}" 
-                                   class="btn btn-sm btn-outline-danger rounded-pill px-3"
-                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce devis ?')">Supprimer</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    <c:if test="${empty devisList}">
-                        <tr>
-                            <td colspan="6" class="text-center py-5 text-muted">
-                                Aucun devis trouvé.
-                            </td>
-                        </tr>
-                    </c:if>
-                </tbody>
-            </table>
-        </div>
+                </c:forEach>
+                <c:if test="${empty devisList}">
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted font-monospace italic">
+                            Aucune donnée de tarification disponible.
+                        </td>
+                    </tr>
+                </c:if>
+            </tbody>
+        </table>
     </div>
 </div>
 

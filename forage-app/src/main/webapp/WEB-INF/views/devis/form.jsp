@@ -4,58 +4,55 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <jsp:include page="../layout/header.jsp" />
 
-<div class="fade-in pt-4 d-flex justify-content-center">
-    <div class="card card-custom border-0 shadow-sm col-md-6">
-        <div class="card-body p-4 p-md-5">
-            <h2 class="mb-1">${devis.id != null ? 'Modifier le Devis' : 'Nouveau Devis'}</h2>
-            <p class="text-muted small mb-4">Veuillez remplir les informations ci-dessous.</p>
+<div class="d-flex justify-content-center">
+    <div class="content-container col-md-6 animate-fade-in shadow-lg">
+        <h2 class="mb-2" style="letter-spacing: -1px;">${devis.id != null ? 'MODIFIER LE DEVIS' : 'CRÉER UN DEVIS'}</h2>
+        <p class="text-muted small mb-5 font-monospace">SOUMISSION DE TARIFICATION #CORP</p>
 
-            <form:form action="${pageContext.request.contextPath}/devis/save" method="post" modelAttribute="devis">
-                <form:hidden path="id" />
+        <form:form action="${pageContext.request.contextPath}/devis/save" method="post" modelAttribute="devis">
+            <form:hidden path="id" />
 
-                <!-- Demande -->
-                <div class="mb-3">
-                    <label class="form-label small text-muted uppercase fw-bold">Demande / Client</label>
-                    <form:select path="demande.id" class="form-select rounded-pill">
-                        <form:options items="${demandeList}" itemValue="id" itemLabel="description" />
-                    </form:select>
-                </div>
+            <!-- Demande -->
+            <div class="mb-4">
+                <label class="form-label">Référence Demande</label>
+                <form:select path="demande.id" class="form-select form-control-custom">
+                    <form:options items="${demandeList}" itemValue="id" itemLabel="description" />
+                </form:select>
+            </div>
 
+            <div class="row">
                 <!-- Type Devis -->
-                <div class="mb-3">
-                    <label class="form-label small text-muted uppercase fw-bold">Type de Devis</label>
-                    <form:select path="typeDevis.id" class="form-select rounded-pill">
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">Type de Devis</label>
+                    <form:select path="typeDevis.id" class="form-select form-control-custom">
                         <form:options items="${typeDevisList}" itemValue="id" itemLabel="libelle" />
                     </form:select>
                 </div>
 
                 <!-- Statut -->
-                <div class="mb-3">
-                    <label class="form-label small text-muted uppercase fw-bold">Statut</label>
-                    <form:select path="statut.id" class="form-select rounded-pill">
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">Statut Actuel</label>
+                    <form:select path="statut.id" class="form-select form-control-custom">
                         <form:options items="${statutList}" itemValue="id" itemLabel="libelle" />
                     </form:select>
                 </div>
+            </div>
 
-                <!-- Date -->
-                <div class="mb-4">
-                    <label class="form-label small text-muted uppercase fw-bold">Date du Devis</label>
-                    <form:input path="dateDevis" type="datetime-local" class="form-control rounded-pill" required="required" />
-                    <c:if test="${devis.dateDevis != null}">
-                        <div class="form-text small">Date actuelle : <fmt:formatDate value="${devis.dateDevis}" pattern="dd/MM/yyyy HH:mm" /></div>
-                    </c:if>
-                </div>
+            <!-- Date -->
+            <div class="mb-5">
+                <label class="form-label">Date de Validation</label>
+                <form:input path="dateDevis" type="datetime-local" class="form-control form-control-custom" required="required" />
+            </div>
 
-                <div class="d-flex gap-2 pt-2">
-                    <button type="submit" class="btn btn-primary px-4 rounded-pill flex-grow-1">
-                        ${devis.id != null ? 'Enregistrer les modifications' : 'Créer le Devis'}
-                    </button>
-                    <a href="${pageContext.request.contextPath}/devis" class="btn btn-outline-secondary px-4 rounded-pill">
-                        Annuler
-                    </a>
-                </div>
-            </form:form>
-        </div>
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-primary-custom flex-grow-1 py-3">
+                    ${devis.id != null ? 'VALIDER LES MODIFICATIONS' : 'ENREGISTRER LE DEVIS'}
+                </button>
+                <a href="${pageContext.request.contextPath}/devis" class="btn btn-outline-custom px-4 py-3">
+                    ANNULER
+                </a>
+            </div>
+        </form:form>
     </div>
 </div>
 
