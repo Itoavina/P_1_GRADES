@@ -1,6 +1,7 @@
 package com.forage.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "statut")
@@ -10,7 +11,8 @@ public class Statut {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "Le libellé est requis")
+    @Column(nullable = false, unique = true, length = 100)
     private String libelle;
 
     public Statut() {}

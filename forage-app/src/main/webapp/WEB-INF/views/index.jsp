@@ -1,39 +1,39 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <jsp:include page="layout/header.jsp" />
 
-<div class="content-container text-center py-5">
-    <h1 class="display-5 fw-bold mb-4" style="letter-spacing: -1px;">GESTION CENTRALE DES FORAGES</h1>
-    <p class="lead mb-5" style="color: var(--text-muted); max-width: 700px; margin: 0 auto;">
-        Interface d'administration corporate pour la supervision des clients, des demandes, de la tarification et de l'exécution des travaux de forage.
+<div class="content-container text-center py-5 fade-in">
+    <h1 class="display-5 mb-3" style="font-weight: 700; letter-spacing: -1px;">GESTION CENTRALE DES FORAGES</h1>
+    <p class="page-subtitle mb-5" style="max-width: 600px; margin: 0 auto; font-size: 0.85rem; letter-spacing: 1.5px;">
+        Supervision des clients, demandes, tarification et exécution des travaux
     </p>
 
-    <div class="row g-4 mt-2 justify-content-center">
-        <!-- Client Card -->
-        <div class="col-md-3">
-            <div class="p-4" style="background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 4px;">
-                <h4 class="mb-3">Base Clients</h4>
-                <a href="${pageContext.request.contextPath}/clients" class="btn btn-primary-custom w-100 py-2">Ouvrir</a>
+    <div class="row g-4 mt-3 justify-content-center">
+        <div class="col-md-3 col-sm-6">
+            <div class="dash-card">
+                <h4>Base Clients</h4>
+                <p class="dash-desc">Gestion du répertoire des clients et contacts</p>
+                <a href="${pageContext.request.contextPath}/clients" class="btn btn-primary-custom w-100">Ouvrir</a>
             </div>
         </div>
-        <!-- Demandes Card -->
-        <div class="col-md-3">
-            <div class="p-4" style="background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 4px;">
-                <h4 class="mb-3">Demandes</h4>
-                <a href="${pageContext.request.contextPath}/demandes" class="btn btn-outline-custom w-100 py-2">Consulter</a>
+        <div class="col-md-3 col-sm-6">
+            <div class="dash-card">
+                <h4>Demandes</h4>
+                <p class="dash-desc">Suivi des demandes d'intervention forage</p>
+                <a href="${pageContext.request.contextPath}/demandes" class="btn btn-outline-custom w-100">Consulter</a>
             </div>
         </div>
-        <!-- Devis Card -->
-        <div class="col-md-3">
-            <div class="p-4" style="background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 4px;">
-                <h4 class="mb-3">Financier (Devis)</h4>
-                <a href="${pageContext.request.contextPath}/devis" class="btn btn-outline-custom w-100 py-2">Tarification</a>
+        <div class="col-md-3 col-sm-6">
+            <div class="dash-card">
+                <h4>Devis</h4>
+                <p class="dash-desc">Module de tarification et détails financiers</p>
+                <a href="${pageContext.request.contextPath}/devis" class="btn btn-outline-custom w-100">Tarification</a>
             </div>
         </div>
-        <!-- Travaux Card -->
-        <div class="col-md-3">
-            <div class="p-4" style="background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 4px;">
-                <h4 class="mb-3">Opérations</h4>
-                <a href="${pageContext.request.contextPath}/travaux" class="btn btn-outline-custom w-100 py-2">Superviser</a>
+        <div class="col-md-3 col-sm-6">
+            <div class="dash-card">
+                <h4>Travaux</h4>
+                <p class="dash-desc">Opérations et exécution des interventions</p>
+                <a href="${pageContext.request.contextPath}/travaux" class="btn btn-outline-custom w-100">Superviser</a>
             </div>
         </div>
     </div>

@@ -3,14 +3,12 @@
 <jsp:include page="../layout/header.jsp" />
 
 <div class="content-container fade-in">
-    <div class="d-flex justify-content-between align-items-end mb-4 border-bottom pb-3" style="border-color: var(--border-color) !important;">
-        <div>
-            <h2 class="mb-1">REGISTRE DES DEMANDES</h2>
-            <div style="color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">
-                Suivi des demandes d'intervention
-            </div>
+    <div class="page-header">
+        <div class="page-header-info">
+            <h2>REGISTRE DES DEMANDES</h2>
+            <div class="page-subtitle">Suivi des demandes d'intervention</div>
         </div>
-        <a href="${pageContext.request.contextPath}/demandes/create" class="btn btn-primary-custom px-4 py-2">
+        <a href="${pageContext.request.contextPath}/demandes/create" class="btn btn-primary-custom">
             NOUVELLE DEMANDE
         </a>
     </div>
@@ -19,9 +17,10 @@
         <table class="table table-custom table-borderless">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th style="width: 70px;">ID</th>
                     <th>CLIENT</th>
                     <th>DATE</th>
+                    <th>STATUT</th>
                     <th>LIEU</th>
                     <th>DESCRIPTION</th>
                     <th class="text-end">ACTIONS</th>
@@ -30,23 +29,29 @@
             <tbody>
                 <c:forEach var="demande" items="${demandes}">
                     <tr>
-                        <td style="color: var(--text-muted);">#${demande.id}</td>
+                        <td class="font-mono" style="color: var(--text-muted);">#${demande.id}</td>
                         <td class="fw-bold">${demande.client.nom}</td>
                         <td>${demande.dateDemande}</td>
+                        <td>
+                            <c:set var="status" value="${demande.currentStatut}" />
+                            <span class="status-pill ${status == 'EN ATTENTE' || status == 'en attente' ? 'status-pill--default' : 'status-pill--active'}">
+                                <c:out value="${status != null ? status : 'EN ATTENTE'}" />
+                            </span>
+                        </td>
                         <td>${demande.lieu}</td>
-                        <td>${demande.description}</td>
-                        <td class="text-end">
+                        <td style="max-width: 220px;" class="text-truncate">${demande.description}</td>
+                        <td class="text-end" style="white-space: nowrap;">
                             <a href="${pageContext.request.contextPath}/demandes/edit/${demande.id}" 
                                class="btn btn-sm btn-outline-custom">ÉDITER</a>
                             <a href="${pageContext.request.contextPath}/demandes/delete/${demande.id}" 
-                               class="btn btn-sm btn-outline-custom text-danger border-danger ms-2"
+                               class="btn btn-sm btn-danger-custom ms-2"
                                onclick="return confirm('Confirmer la suppression de la demande ?');">SUPPRIMER</a>
                         </td>
                     </tr>
                 </c:forEach>
                 <c:if test="${empty demandes}">
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted text-uppercase">
+                        <td colspan="7" class="empty-state">
                             Aucune demande enregistrée
                         </td>
                     </tr>

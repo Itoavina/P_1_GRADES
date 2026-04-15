@@ -28,7 +28,7 @@ public class Devis {
     @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date dateDevis;
 
-    @OneToMany(mappedBy = "devis", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "devis", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private java.util.List<DetailDevis> detailDevisList = new java.util.ArrayList<>();
 
     public Devis() {}
@@ -49,5 +49,30 @@ public class Devis {
     public Date getDateDevis() { return dateDevis; }
     public void setDateDevis(Date dateDevis) { this.dateDevis = dateDevis; }
     public java.util.List<DetailDevis> getDetailDevisList() { return detailDevisList; }
-    public void setDetailDevisList(java.util.List<DetailDevis> detailDevisList) { this.detailDevisList = detailDevisList; }
+    public void setDetailDevisList(java.util.List<DetailDevis> detailDevisList) { 
+        this.detailDevisList = detailDevisList; 
+        if (detailDevisList != null) {
+            for (DetailDevis detail : detailDevisList) {
+                detail.setDevis(this);
+            }
+        }
+    }
+
+    public void addDetail(DetailDevis detail) {
+        detailDevisList.add(detail);
+        detail.setDevis(this);
+    }
+
+    public void removeDetail(DetailDevis detail) {
+        detailDevisList.remove(detail);
+        detail.setDevis(null);
+    }
+
+    public java.math.BigDecimal getTotal() {
+        if (detailDevisList == null) return java.math.BigDecimal.ZERO;
+        return detailDevisList.stream()
+                .filter(d -> d.getMontant() != null)
+                .map(DetailDevis::getMontant)
+                .reduce(java.math.BigDecimal.ZERO, java.math.BigDecimal::add);
+    }
 }

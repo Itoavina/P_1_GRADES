@@ -3,9 +3,16 @@
 --  Compatible with PostgreSQL 12+
 -- ============================================================
 
--- Create the database (run this separately as a superuser if needed)
--- CREATE DATABASE forage;
--- \c forage;
+-- Reset Database structure
+DROP TABLE IF EXISTS demande_statut_historique CASCADE;
+DROP TABLE IF EXISTS detail_devis CASCADE;
+DROP TABLE IF EXISTS devis CASCADE;
+DROP TABLE IF EXISTS travaux CASCADE;
+DROP TABLE IF EXISTS demande CASCADE;
+DROP TABLE IF EXISTS client CASCADE;
+DROP TABLE IF EXISTS type_devis CASCADE;
+DROP TABLE IF EXISTS statut CASCADE;
+DROP TABLE IF EXISTS statut_travaux CASCADE;
 
 -- -------------------------------------------------------------
 --  1. client   
@@ -29,22 +36,38 @@ CREATE TABLE demande (
         FOREIGN KEY (client_id) REFERENCES client(id)
 );
 
--- AJOUTER UNE TABLE DEMANDE_STATUS / SPRINT 3 BIS
-
 -- -------------------------------------------------------------
---  3. type_devis
--- -------------------------------------------------------------
-CREATE TABLE type_devis (
-    id      SERIAL PRIMARY KEY,
-    libelle VARCHAR(100) NOT NULL
-);
-
--- -------------------------------------------------------------
---  4. statut
+--  3. statut
 -- -------------------------------------------------------------
 CREATE TABLE statut (
     id      SERIAL PRIMARY KEY,
-    libelle VARCHAR(100) NOT NULL
+    libelle VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- -------------------------------------------------------------
+--  2b. demande_statut_historique
+-- -------------------------------------------------------------
+CREATE TABLE demande_statut_historique (
+    id              SERIAL PRIMARY KEY,
+    demande_id      INT NOT NULL,
+    id_statut       INT NOT NULL,
+    description     TEXT,
+    date_changement TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_historique_demande
+        FOREIGN KEY (demande_id) REFERENCES demande(id) ON DELETE CASCADE,
+    CONSTRAINT fk_historique_statut
+        FOREIGN KEY (id_statut) REFERENCES statut(id)
+);
+
+-- -------------------------------------------------------------
+--  4. type_devis
+-- -------------------------------------------------------------
+CREATE TABLE type_devis (
+    id      SERIAL PRIMARY KEY,
+    libelle VARCHAR(100) NOT NULL UNIQUE,
+    statut_id INT,
+    CONSTRAINT fk_type_devis_statut
+        FOREIGN KEY (statut_id) REFERENCES statut(id)
 );
 
 -- -------------------------------------------------------------
@@ -71,10 +94,14 @@ CREATE TABLE detail_devis (
     id      SERIAL PRIMARY KEY,
     devis_id INT NOT NULL,
     libelle  VARCHAR(255) NOT NULL,
+    quantite NUMERIC(12,2) NOT NULL DEFAULT 1,
+    prix_unitaire NUMERIC(12,2) NOT NULL DEFAULT 0,
     montant  NUMERIC(12,2) NOT NULL DEFAULT 0,
     CONSTRAINT fk_detail_devis_devis
         FOREIGN KEY (devis_id) REFERENCES devis(id)
 );
+
+
 
 -- -------------------------------------------------------------
 --  7. statut_travaux
@@ -100,17 +127,22 @@ CREATE TABLE travaux (
 -- -------------------------------------------------------------
 --  Reference data – populate lookup tables
 -- -------------------------------------------------------------
-INSERT INTO type_devis (libelle) VALUES
-    ('Devis estimatif'),
-    ('Devis définitif');
-
 INSERT INTO statut (libelle) VALUES
-    ('En attente'),
-    ('Approuvé'),
-    ('Rejeté');
+    ('en attente'),
+    ('devis étude créé'),
+    ('devis forage créé');
+
+INSERT INTO type_devis (libelle, statut_id) VALUES
+    ('devis étude', 2),
+    ('devis forage', 3);
 
 INSERT INTO statut_travaux (libelle) VALUES
     ('Planifié'),
     ('En cours'),
     ('Terminé'),
     ('Suspendu');
+
+
+-- Chiffre d'affaire prévisionnel
+SELECT SUM(montant) FROM detail_devis;
+

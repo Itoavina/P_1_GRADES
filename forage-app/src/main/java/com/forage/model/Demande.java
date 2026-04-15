@@ -30,11 +30,18 @@ public class Demande {
     @Column(nullable = false, length = 255)
     private String lieu;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Devis> devisList = new java.util.ArrayList<>();
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Travaux> travauxList = new java.util.ArrayList<>();
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @OneToMany(mappedBy = "demande", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OrderBy("dateChangement DESC")
+    private java.util.List<DemandeStatutHistorique> statutHistoriqueList = new java.util.ArrayList<>();
 
     public Demande() {}
 
@@ -58,4 +65,28 @@ public class Demande {
     public void setDevisList(java.util.List<Devis> devisList) { this.devisList = devisList; }
     public java.util.List<Travaux> getTravauxList() { return travauxList; }
     public void setTravauxList(java.util.List<Travaux> travauxList) { this.travauxList = travauxList; }
+    public java.util.List<DemandeStatutHistorique> getStatutHistoriqueList() { return statutHistoriqueList; }
+    public void setStatutHistoriqueList(java.util.List<DemandeStatutHistorique> statutHistoriqueList) { 
+        this.statutHistoriqueList = statutHistoriqueList; 
+    }
+
+    public void addStatut(Statut statut) {
+        DemandeStatutHistorique histo = new DemandeStatutHistorique(this, statut);
+        this.statutHistoriqueList.add(histo);
+    }
+
+    public void addStatut(Statut statut, String description) {
+        DemandeStatutHistorique histo = new DemandeStatutHistorique(this, statut, description);
+        this.statutHistoriqueList.add(histo);
+    }
+
+    public String getCurrentStatut() {
+        if (statutHistoriqueList == null || statutHistoriqueList.isEmpty()) {
+            return "EN ATTENTE";
+        }
+        return statutHistoriqueList.stream()
+                .max((h1, h2) -> h1.getDateChangement().compareTo(h2.getDateChangement()))
+                .map(h -> h.getStatut().getLibelle().toUpperCase())
+                .orElse("EN ATTENTE");
+    }
 }

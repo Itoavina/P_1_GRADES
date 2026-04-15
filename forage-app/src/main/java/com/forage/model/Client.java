@@ -22,6 +22,7 @@ public class Client {
     @Column(nullable = false, length = 150)
     private String contact;
 
+    @com.fasterxml.jackson.annotation.JsonIgnore
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Demande> demandes = new java.util.ArrayList<>();
 
